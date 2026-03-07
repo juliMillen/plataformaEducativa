@@ -33,21 +33,21 @@ public class PermissionController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<Permission> savePermission(@RequestBody Permission permission) {
         permission = permissionService.save(permission);
         return new ResponseEntity<>(permission, HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<Permission> updatePermission(@RequestBody Permission permission) {
         permissionService.update(permission);
         return new ResponseEntity<>(permission, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<String> deletePermission(@PathVariable Long id) {
         permissionService.deleteById(id);
         return new ResponseEntity<>("Permission deleted", HttpStatus.NO_CONTENT);
