@@ -7,6 +7,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,36 +20,42 @@ public class EstudianteController {
     private EstudianteService studentService;
 
     @GetMapping("")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Estudiante>> getAllStudents(){
         List<Estudiante> studentList = studentService.getAllStudents();
         return new ResponseEntity<>(studentList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Estudiante> getStudentById(@PathVariable Long id){
         Estudiante toSearch = studentService.getStudentById(id);
         return new ResponseEntity<>(toSearch, HttpStatus.OK);
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<Estudiante> createStudent(@RequestBody Estudiante student){
         Estudiante toCreate = studentService.createStudent(student);
         return new ResponseEntity<>(toCreate, HttpStatus.CREATED);
     }
 
     @PatchMapping("/add/course/{id}")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<Estudiante> addCourse(@PathVariable Long id, @RequestBody Curso course){
         Estudiante student = studentService.addCourse(id,course);
         return new ResponseEntity<>(student,HttpStatus.OK);
     }
 
     @PatchMapping("/update/{id}")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<Estudiante> updateStudent(@PathVariable Long id, @RequestBody Estudiante student){
         Estudiante toUpdate = studentService.updateStudent(id,student);
         return new ResponseEntity<>(toUpdate,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN)")
     public ResponseEntity<String> deleteStudentById(@PathVariable Long id){
         studentService.deleteStudent(id);
         return new ResponseEntity<>("Student delete succesfully", HttpStatus.NOT_FOUND);
